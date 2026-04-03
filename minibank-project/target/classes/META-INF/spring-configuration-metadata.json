@@ -1,0 +1,20 @@
+{
+  "groups": [
+    {
+      "name": "exchange",
+      "type": "minibank.config.ExchangeRateProperties",
+      "sourceType": "minibank.config.ExchangeRateProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "exchange.rates",
+      "type": "java.util.Map<java.lang.String,java.math.BigDecimal>",
+      "sourceType": "minibank.config.ExchangeRateProperties"
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MiniBank Web Tester</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .box { border: 1px solid #ddd; padding: 15px; border-radius: 5px; margin-bottom: 20px; background: #fafafa; }
+        h3 { margin-top: 0; color: #333; }
+        input, select, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        button { background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; }
+        button:hover { background: #218838; }
+        pre { background: #2d2d2d; color: #00ff00; padding: 15px; border-radius: 5px; overflow-x: auto; min-height: 100px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🏦 MiniBank API Tester</h2>
+
+    <div class="box">
+        <h3>1. Create an Account</h3>
+        <input type="text" id="ownerName" placeholder="Owner Name (e.g., Alice)" value="Alice Popescu">
+        <input type="text" id="iban" placeholder="Valid IBAN (e.g., DE89370400440532013000)" value="DE89370400440532013000">
+        <select id="currency">
+            <option value="EUR">EUR</option>
+            <option value="RON">RON</option>
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+        </select>
+        <select id="accountType">
+            <option value="CHECKING">CHECKING</option>
+            <option value="SAVINGS">SAVINGS</option>
+        </select>
+        <button onclick="createAccount()">Create Account</button>
+    </div>
+
+    <div class="box">
+        <h3>2. Transfer Money</h3>
+        <input type="text" id="sourceIban" placeholder="Source IBAN" value="RO49AAAA1B31007593840000">
+        <input type="text" id="targetIban" placeholder="Target IBAN" value="DE89370400440532013000">
+        <input type="number" id="amount" placeholder="Amount (e.g., 500.00)" value="500.00">
+        <button onclick="createTransfer()">Send Money</button>
+    </div>
+
+    <h3>Server Response:</h3>
+    <pre id="output">Waiting for action...</pre>
+</div>
+
+<script>
+    const output = document.getElementById('output');
+
+    // Helper to format and show JSON on the screen
+    function printResponse(res, data) {
+        if(res.ok) {
+            output.style.color = '#00ff00'; // Green for success
+        } else {
+            output.style.color = '#ff4444'; // Red for errors
+        }
+        output.innerText = `Status: ${res.status} ${res.statusText}\n\n` + JSON.stringify(data, null, 2);
+    }
+
+    // Call POST /api/accounts
+    async function createAccount() {
+        output.innerText = "Creating account...";
+        const payload = {
+            ownerName: document.getElementById('ownerName').value,
+            iban: document.getElementById('iban').value,
+            currency: document.getElementById('currency').value,
+            accountType: document.getElementById('accountType').value
+        };
+
+        try {
+            const res = await fetch('/api/accounts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            printResponse(res, data);
+        } catch (err) {
+            output.innerText = "Error: " + err.message;
+        }
+    }
+
+    // Call POST /api/transfers
+    async function createTransfer() {
+        output.innerText = "Processing transfer...";
+        const payload = {
+            sourceIban: document.getElementById('sourceIban').value,
+            targetIban: document.getElementById('targetIban').value,
+            amount: parseFloat(document.getElementById('amount').value)
+        };
+
+        try {
+            const res = await fetch('/api/transfers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            printResponse(res, data);
+        } catch (err) {
+            output.innerText = "Error: " + err.message;
+        }
+    }
+</script>
+
+</body>
+</html>
