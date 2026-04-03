@@ -43,10 +43,9 @@ A robust, enterprise-grade core banking REST API built from scratch. This projec
 Clone the repository and run the application using Maven:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/minibank.git
-cd minibank
+git clone [https://github.com/stefanrosu12/Minibank-Project.git](https://github.com/stefanrosu12/Minibank-Project.git)
+cd Minibank-Project/minibank-project
 mvn spring-boot:run
-```
 
 The application will start on `http://localhost:8080`.
 
